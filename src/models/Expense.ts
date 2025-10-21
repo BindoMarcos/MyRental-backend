@@ -5,54 +5,51 @@ import { ExpenseAllocation } from './ExpenseAllocation';
 
 @Entity('expenses')
 export class Expense {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number = 0;
 
   @Column()
-  title: string;
+  title: string = "";
 
   @Column({ nullable: true })
-  description: string;
+  description: string = "";
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  amount: number;
+  amount: number = 0;
 
   @Column({ type: 'date' })
-  date: string;
+  date: string = "";
 
   @Column()
-  category: 'Maintenance' | 'Utilities' | 'Insurance' | 'Taxes' | 'Repairs' | 'Other';
-
-  @Column()
-  assignmentType: 'property' | 'building';
+  assignmentType: 'property' | 'building' = "property";
 
   @Column({ nullable: true })
-  propertyId: string;
+  propertyId: string = "";
 
   @Column({ nullable: true })
-  buildingId: string;
+  buildingId: string = "";
 
   @Column()
-  distributionMethod: 'equal' | 'custom';
+  distributionMethod: 'equal' | 'custom' = "custom";
 
   @Column('simple-json', { nullable: true })
-  unitDistribution: { [unitId: string]: number };
+  unitDistribution!: { [unitId: string]: number };
 
   @Column({ nullable: true })
-  unitsCount: number;
+  unitsCount: number = 0;
 
   @Column({ nullable: true })
-  receiptFile: string;
+  receiptFile: string = "";
 
   @Column()
-  status: 'Pending' | 'Paid' | 'Approved';
+  status: 'Pending' | 'Paid' | 'Approved' = 'Pending';
 
   @CreateDateColumn()
-  createdAt: string;
+  createdAt: string = "";
 
   @ManyToOne(() => Property, property => property.expensesRecords)
-  property: Property;
+  property: Property = new Property;
 
   @OneToMany(() => ExpenseAllocation, allocation => allocation.expense)
-  allocations: ExpenseAllocation[];
+  allocations!: ExpenseAllocation[];
 }

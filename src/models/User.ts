@@ -1,23 +1,35 @@
-// src/entities/User.ts
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, ManyToOne, OneToMany } from 'typeorm';
 import bcrypt from 'bcrypt';
+import { Property } from './Property';
 
 @Entity('users')
 export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number = 0;
+
+  @Column({ length: 10 })
+  dni: string = "0";
+
+  @Column({ length: 20 })
+  name: string = "";
+
+  @Column({ length: 20 })
+  surname: string = "";
 
   @Column({ unique: true })
-  email: string;
+  email: string = '';
 
   @Column()
-  password: string;
+  password: string = '';
 
   @Column({ default: 'user' })
-  role: 'user' | 'admin';
+  role: 'user' | 'admin' = 'user';
 
   @Column({ default: true })
-  isActive: boolean;
+  isActive: boolean = true;
+
+  @OneToMany(() => Property, property => property.owner)
+  properties!: Property[];
 
   // Hook de TypeORM para hashear la contraseña antes de guardarla
   @BeforeInsert()

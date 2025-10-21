@@ -4,45 +4,45 @@ import { Contract } from './Contract';
 
 @Entity('payments')
 export class Payment {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number = 0;
 
   @Column()
-  contractId: string;
+  contractId: string = "";
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  amount: number;
+  amount: number = 0;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  baseAmount: number;
+  baseAmount: number = 0;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  penaltyAmount: number;
+  penaltyAmount: number = 0;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  expenseAmount: number;
+  expenseAmount: number = 0;
 
   @Column('simple-array', { nullable: true })
-  expenseIds: string[];
+  expenseIds!: string[];
 
   @Column({ type: 'date' })
-  dueDate: string;
+  dueDate: string = "";
 
   @Column({ type: 'date', nullable: true })
-  paidDate: string;
+  paidDate: string = "";
 
   @Column()
-  status: 'Pendiente' | 'Pagado' | 'Atrasado' | 'Programado';
+  status: 'Pendiente' | 'Pagado' | 'Atrasado' | 'Programado' = "Pendiente";
 
   @Column()
-  paymentPeriod: string;
+  paymentPeriod: string = "";
 
   @Column({ nullable: true })
-  daysLate: number;
+  daysLate: number = 0;
 
   @Column({ default: false })
-  isScheduled: boolean;
+  isScheduled: boolean = true;
 
   @ManyToOne(() => Contract, contract => contract.payments)
-  contract: Contract;
+  contract: Contract = new Contract;
 }

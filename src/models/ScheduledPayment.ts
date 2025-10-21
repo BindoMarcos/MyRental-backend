@@ -4,27 +4,27 @@ import { Contract } from './Contract';
 
 @Entity('scheduled_payments')
 export class ScheduledPayment {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number = 0;
 
   @Column()
-  contractId: string;
+  contractId: string = "";
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  baseAmount: number;
+  baseAmount: number = 0;
 
   @Column({ type: 'date' })
-  dueDate: string;
+  dueDate: string = "";
 
   @Column()
-  paymentPeriod: string;
+  paymentPeriod: string = "";
 
   @Column()
-  status: 'Programado' | 'Generado' | 'Vencido';
+  status: 'Programado' | 'Generado' | 'Vencido' = "Programado"; 
 
   @CreateDateColumn()
-  createdAt: string;
+  createdAt: string = "";
 
   @ManyToOne(() => Contract, contract => contract.scheduledPayments)
-  contract: Contract;
+  contract: Contract = new Contract();
 }

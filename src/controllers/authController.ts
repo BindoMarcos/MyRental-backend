@@ -9,7 +9,7 @@ const userRepository = AppDataSource.getRepository(User);
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { email, password, role } = req.body;
+    const { email, password, name, surname, dni } = req.body;
 
     // Verificar si el usuario ya existe
     const existingUser = await userRepository.findOneBy({ email });
@@ -18,11 +18,11 @@ export const register = async (req: Request, res: Response) => {
     }
 
     // Crear y guardar el nuevo usuario. El hash de la contraseña se hace en el hook @BeforeInsert de la entidad User.
-    const user = userRepository.create({ email, password, role });
+    const user = userRepository.create({ email, password, name, surname, dni });
     await userRepository.save(user);
 
     // Generar un token JWT para el nuevo usuario
-    const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET!, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id, role: user.role, name: user.name }, process.env.JWT_SECRET!, { expiresIn: '1h' });
 
     res.status(201).json({ message: 'User registered successfully', token });
   } catch (error) {
@@ -48,7 +48,7 @@ export const login = async (req: Request, res: Response) => {
     }
 
     // Generar un token JWT
-    const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET!, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id, role: user.role, name: user.name }, process.env.JWT_SECRET!, { expiresIn: '1h' });
 
     res.status(200).json({ message: 'Login successful', token });
   } catch (error) {

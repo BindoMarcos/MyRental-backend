@@ -14,20 +14,6 @@ services:
     depends_on:
       - database
 
-  frontend:
-    build:
-      context: ../../../../../Users\bindo\Escritorio\MyRental
-      dockerfile: Dockerfile
-    container_name: frontend
-    restart: always
-    ports:
-      - "80:80"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules 
-    depends_on:
-      - backend
-
   database:
     image: postgres:14-alpine
     container_name: database

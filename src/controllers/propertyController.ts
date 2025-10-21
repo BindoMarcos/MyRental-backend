@@ -1,11 +1,11 @@
-// src/controllers/propertyController.ts
 import { Request, Response } from 'express'; 
-import { create, deleteById, findAll, findById } from '../services/propertyService';
+import { create, deleteById, findAll, findById, update } from '../services/propertyService';
  
 export const getProperties = async (req: Request, res: Response): Promise<void> => {
   
   try {
-    const properties = await findAll();
+    const {ownerID} = req.params
+    const properties = await findAll(Number(ownerID));
     res.status(200).json(properties);
   } catch (error) {
     console.error('Error fetching properties:', error);
@@ -16,7 +16,7 @@ export const getProperties = async (req: Request, res: Response): Promise<void> 
 export const getPropertyByID = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const property = await findById(id);
+    const property = await findById(Number(id));
     if (!property) {
       res.status(404).json({ message: 'Property not found' });
       return;
@@ -41,14 +41,29 @@ export const createProperty = async (req: Request, res: Response): Promise<void>
 export const deleteProperty = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const property = await deleteById(id);
+    const property = await deleteById(Number(id));
     if (!property) {
       res.status(404).json({ message: 'Property not found' });
       return;
     }
-    res.status(200).json(property);
+    res.status(200).json({message: `Property with ID: ${id} deleted succesfully`});
   } catch (error) {
     console.error('Error fetching property by ID:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+export const updateProperty = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const updatedProperty = await update(Number(id), req.body);
+    if (!updatedProperty) {
+      res.status(404).json({ message: 'Property not found' });
+      return;
+    }
+    res.status(200).json(updatedProperty);
+  } catch (error) {
+    console.error('Error updating property:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}

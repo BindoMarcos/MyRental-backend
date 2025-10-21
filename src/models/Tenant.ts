@@ -1,31 +1,28 @@
 // src/entities/Tenant.ts
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
 import { Contract } from './Contract';
-import { Property } from './Property';
 
 @Entity('tenants')
 export class Tenant {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number = 0;
 
   @Column()
-  firstName: string;
+  firstName: string = "";
 
   @Column()
-  lastName: string;
+  lastName: string = "";
 
   @Column({ unique: true })
-  dni: string;
+  dni: number = 0;
 
   @Column({ unique: true })
-  email: string;
+  email: string = "";
 
   @Column()
-  phone: string;
+  phone: string = "";
 
-  @ManyToMany(() => Contract, contract => contract.tenants)
-  contracts: Contract[];
+  @ManyToMany(() => Contract, contract => contract.tenants, { nullable: true })
+  contracts!: Contract[];
 
-  @ManyToOne(() => Property, property => property.tenants)
-  property: Property;
 }

@@ -1,5 +1,4 @@
-// src/entities/Contract.ts
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, ManyToMany, JoinTable, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, ManyToMany, JoinTable, CreateDateColumn, OneToOne } from 'typeorm';
 import { Property } from './Property';
 import { Tenant } from './Tenant';
 import { Payment } from './Payment';
@@ -7,49 +6,50 @@ import { ScheduledPayment } from './ScheduledPayment';
 
 @Entity('contracts')
 export class Contract {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number = 0;
 
   @Column()
-  propertyId: string;
+  propertyId: string = "";
 
   @Column('simple-array')
-  tenantIds: string[];
+  tenantIds!: string[];
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  rentAmount: number;
+  rentAmount: number = 0;
 
   @Column({ type: 'date' })
-  startDate: string;
+  startDate: string = "";
 
   @Column({ type: 'date' })
-  endDate: string;
+  endDate: string = "";
 
   @Column()
-  increaseFrequency: number;
+  increaseFrequency: number = 0;
 
   @Column()
-  penaltyPercentage: number;
+  penaltyPercentage: number = 0;
 
   @Column({ nullable: true })
-  contractFile: string;
+  contractFile: string = "";
 
   @Column()
-  status: 'Activo' | 'Vencido' | 'Cancelado';
+  status: 'Activo' | 'Vencido' | 'Cancelado' | 'Inactivo' = 'Inactivo';
 
   @CreateDateColumn()
-  createdAt: string;
+  createdAt: string = "";
 
-  @ManyToOne(() => Property, property => property.contracts)
-  property: Property;
+  @OneToOne(() => Property, property => property.contract)
+  property: Property = new Property;
 
   @ManyToMany(() => Tenant, tenant => tenant.contracts)
   @JoinTable()
-  tenants: Tenant[];
+  tenants!: Tenant[];
 
   @OneToMany(() => Payment, payment => payment.contract)
-  payments: Payment[];
+  payments!: Payment[];
 
   @OneToMany(() => ScheduledPayment, scheduledPayment => scheduledPayment.contract)
-  scheduledPayments: ScheduledPayment[];
+  scheduledPayments!: ScheduledPayment[];
+  
 }

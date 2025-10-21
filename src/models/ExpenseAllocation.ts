@@ -9,33 +9,34 @@ import { Property } from "./Property";
 
 @Entity('expense_allocations')
 export class ExpenseAllocation {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number = 0;
 
   @Column()
-  expenseId: string;
+  expenseId: string = "";
 
   @Column()
-  propertyId: string;
+  propertyId: string = "";
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  allocatedAmount: number;
+  allocatedAmount: number = 0;
 
   @Column({ nullable: true })
-  paymentId: string;
+  paymentId: string = "";
 
   @Column({ type: 'date', nullable: true })
-  paidDate: string;
+  paidDate: string = "";
 
   @Column()
-  status: 'Allocated' | 'Paid';
+  status: 'Allocated' | 'Paid' = 'Allocated';
 
   @ManyToOne(() => Expense, expense => expense.allocations)
-  expense: Expense;
+  expense: Expense = new Expense;
 
- /*  @ManyToOne(() => Payment, payment => payment.expenseAllocations)
-  payment: Payment;
- */
+  /*  @ManyToOne(() => Payment, payment => payment.expenseAllocations)
+   payment: Payment;
+  */
+
   @ManyToOne(() => Property)
-  property: Property;
+  property: Property = new Property;
 }

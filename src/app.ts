@@ -1,14 +1,14 @@
-// src/app.ts
 import 'reflect-metadata';
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import propertyRoutes from './routes/propertyRoutes';
 import { AppDataSource } from './data-source';
 import authRoutes from './routes/authRoutes';
-import propertyRoutes from './routes/propertyRoutes';
+import path from 'path';
+import tenantRoutes from './routes/tenantRoutes';
 
-
-dotenv.config();
+dotenv.config({ override: true });
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,9 +18,9 @@ app.use(express.json());
 
 // Rutas principales
 app.use('/api/auth', authRoutes);
-app.use('/api/properties', propertyRoutes);
-/* app.use('/api/tenants', tenantRoutes);
-app.use('/api/contracts', contractRoutes);
+app.use('/api/property', propertyRoutes);
+app.use('/api/tenant', tenantRoutes);
+app.use('/api/contract', contractRoutes);/*
 app.use('/api/payments', paymentRoutes);
 app.use('/api/expenses', expenseRoutes); */
 
